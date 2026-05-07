@@ -1,18 +1,22 @@
-```markdown
 # Modelagem UML - Rede de Cinemas
 
 ## A. Diagrama de Casos de Uso
 ```mermaid
-useCaseDiagram
-    actor "Administrador / Funcionário" as Admin
-    actor "Espectador" as Esp
-    
-    Admin --> (Manter Cinemas e Filmes)
-    Admin --> (Agendar Sessões)
-    Admin --> (Registrar Público da Sessão)
-    Admin --> (Consultar Relatórios)
-    
-    Esp --> (Consultar Filmes e Horários)
+graph LR
+    subgraph Sistema_Cinema
+        UC1(Manter Cinemas e Filmes)
+        UC2(Agendar Sessões)
+        UC3(Registrar Público da Sessão)
+        UC4(Consultar Relatórios)
+        UC5(Consultar Filmes e Horários)
+    end
+
+    Admin((Admin/Funcionário)) --- UC1
+    Admin --- UC2
+    Admin --- UC3
+    Admin --- UC4
+
+    Esp((Espectador)) --- UC5
 
 ```
 
@@ -58,53 +62,5 @@ stateDiagram-v2
 
 ```
 
-## D. Diagrama de Sequência (Fluxo de Dados)
-
-```mermaid
-sequenceDiagram
-    participant View
-    participant Controller
-    participant Service
-    participant Repository
-    participant SQLite
-
-    View->>Controller: fechar_sessao(id, qtd)
-    Controller->>Service: registrar_presenca(id, qtd)
-    Service->>Repository: buscar_por_id(id)
-    Repository-->>Service: retorna Sessao
-    Note over Service: Valida Capacidade
-    Service->>Repository: salvar_publico(id, qtd)
-    Repository->>SQLite: UPDATE sessoes
-    Service-->>Controller: Confirmação
-    Controller-->>View: Mensagem de Sucesso
-
 ```
 
-```
-
----
-
-### 2. No arquivo `README.md` (na raiz do projeto)
-Este é o arquivo que o professor vai ver primeiro ao abrir o seu GitHub. Ele explica a arquitetura.
-
-**Cole este conteúdo lá:**
-
-```markdown
-# 🎬 Sistema de Gestão - Rede de Cinemas
-
-Projeto de Engenharia de Software para controle de filmes, sessões e público.
-
-## 🏗️ Arquitetura
-O sistema utiliza o padrão **MVC + Service + Repository** para garantir a separação de responsabilidades:
-- **Models**: Representação dos dados.
-- **Repositories**: Manipulação do banco SQLite.
-- **Services**: Onde as Regras de Negócio (ex: limite de capacidade) são validadas.
-- **Controllers**: Gerenciamento do fluxo de entrada e saída.
-
-## 🚀 Como Executar
-1. Entre na pasta `src`.
-2. Execute `python main.py`.
-
-```
-
----
